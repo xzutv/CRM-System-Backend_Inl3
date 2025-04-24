@@ -1,10 +1,17 @@
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"  
-            "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 
 <beans>
 
-	<!-- add your bean definitions here! -->
+    <!-- add your bean definitions here!
+    private CustomerManagementService cms;
+    private DiaryManagementService dms; -->
 
-    <bean id="customerManagementMockImpl" class="se.yrgo.services.customers.CustomerManagementMockImpl"></bean>
+    <bean id="customerService" class="se.yrgo.services.customers.CustomerManagementMockImpl"></bean>
+    <bean id="diaryService" class="se.yrgo.services.diary.DiaryManagementServiceMockImpl"></bean>
+
+    <bean id="callHandlingService" class="se.yrgo.services.calls.CallHandlingServiceImpl">
+        <constructor-arg ref="customerService" />
+        <constructor-arg ref="diaryService" />
+    </bean>
 
 </beans>
