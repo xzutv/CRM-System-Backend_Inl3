@@ -2,10 +2,14 @@ package se.yrgo.dataaccess;
 
 import java.util.List;
 
+import org.springframework.dao.*;
+
 import se.yrgo.domain.Call;
 import se.yrgo.domain.Customer;
 
 public interface CustomerDao {
+
+	public void createTables() throws DataAccessException;
 
 	public void create(Customer customer);
 

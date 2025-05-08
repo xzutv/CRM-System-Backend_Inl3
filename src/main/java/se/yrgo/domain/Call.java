@@ -16,31 +16,33 @@ public class Call {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	private Date timeAndDate;
+	private Date timeStamp;
 
 	private String notes;
 
+
 	public Call(String notes){
 		// this defaults to a timestamp of "now"
-		this (notes, new java.util.Date());
+		this (new java.util.Date(), notes);
 	}
 
-	public Call(String notes, Date timestamp){
+	public Call(Date timeStamp, String notes){
 		// this defaults to a timestamp of "now"
-		this.timeAndDate = timestamp;
+		this.timeStamp = timeStamp;
 		this.notes = notes;
 	}
 
+
 	public String toString()	{
-		return this.timeAndDate + " : " + this.notes;
+		return this.timeStamp + " : " + this.notes;
 	}
 
 	public Date getTimeAndDate() {
-		return timeAndDate;
+		return timeStamp;
 	}
 
-	public void setTimeAndDate(Date timeAndDate) {
-		this.timeAndDate = timeAndDate;
+	public void setTimeAndDate(Date timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
 	public String getNotes() {
