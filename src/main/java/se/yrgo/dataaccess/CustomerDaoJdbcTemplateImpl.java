@@ -1,4 +1,4 @@
-package se.yrgo.services.customers;
+package se.yrgo.dataaccess;
 
 import java.sql.*;
 import java.util.*;
@@ -7,7 +7,6 @@ import java.util.Date;
 import org.springframework.dao.*;
 import org.springframework.jdbc.core.*;
 
-import se.yrgo.dataaccess.*;
 import se.yrgo.domain.*;
 
 public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
