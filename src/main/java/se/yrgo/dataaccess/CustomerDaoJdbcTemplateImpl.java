@@ -11,8 +11,8 @@ import se.yrgo.domain.*;
 
 public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
 
-    private static final String CREATE_TBL_CALL = "CREATE TABLE IF NOT EXISTS TBL_CALL (TIMEANDDATE TIMESTAMP, NOTES VARCHAR(255), CUSTOMERID VARCHAR(100))";
-    private static final String CREATE_CUSTOMER_TBL = "CREATE TABLE IF NOT EXISTS CUSTOMER (CUSTOMERID VARCHAR(100), COMPANYNAME VARCHAR(100), EMAIL VARCHAR(30), TELEPHONE VARCHAR(12), NOTES VARCHAR(255))";
+    private static final String CREATE_CUSTOMER_TBL = "CREATE TABLE CUSTOMER (CUSTOMERID VARCHAR(100), COMPANYNAME VARCHAR(100), EMAIL VARCHAR(30), TELEPHONE VARCHAR(12), NOTES VARCHAR(255))";
+    private static final String CREATE_TBL_CALL = "CREATE TABLE TBL_CALL (TIMEANDDATE TIMESTAMP, NOTES VARCHAR(255), CUSTOMERID VARCHAR(100))";
 
     private static final String INSERT_SQL = "INSERT INTO CUSTOMER (CUSTOMERID, COMPANYNAME, EMAIL, TELEPHONE, NOTES) VALUES (?,?,?,?,?)";
     private static final String DELETE_SQL = "DELETE FROM CUSTOMER WHERE CUSTOMERID=?";
@@ -32,8 +32,15 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
     @Override
     public void createTables() throws DataAccessException {
         try {
+            Integer count = this.template.queryForObject(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CUSTOMER'",
+                    Integer.class);
+            if (count == 0) {
+                this.template.update(CREATE_CUSTOMER_TBL);
+            }
+
+            
             this.template.update(CREATE_TBL_CALL);
-            this.template.update(CREATE_CUSTOMER_TBL);
         } catch (org.springframework.jdbc.BadSqlGrammarException e) {
             System.out.println("Assuming the table exists");
         } catch (Exception e) {
@@ -43,14 +50,15 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
 
     @Override
     public void create(Customer customer) {
-        template.update(INSERT_SQL, customer.getCustomerId(), customer.getCompanyName(), customer.getEmail(), customer.getTelephone(),
+        template.update(INSERT_SQL, customer.getCustomerId(), customer.getCompanyName(), customer.getEmail(),
+                customer.getTelephone(),
                 customer.getNotes());
     }
 
     @Override
     public Customer getById(String customerId) throws RecordNotFoundException {
         try {
-            
+
             return template.queryForObject(GET_CUSTOMER_BY_ID, new CustomerRowMapper(), customerId);
         } catch (EmptyResultDataAccessException e) {
             throw new RecordNotFoundException();
@@ -78,10 +86,9 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
         return this.template.query(GET_ALL_CUSTOMERS, new CustomerRowMapper());
     }
 
-    @Override // DDENNA METOD ÄR INTE RÄTT, DU SKA ÄVEN HÄMTA CALLS RELATERADE TILL CUSTOMER
+    @Override
     public Customer getFullCustomerDetail(String customerId) throws RecordNotFoundException {
         try {
-            
 
             Customer customer = this.template.queryForObject(GET_CUSTOMER_BY_ID, new CustomerRowMapper(), customerId);
 
@@ -102,7 +109,7 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
             throw new IllegalArgumentException("Call object cannot be null.");
         }
         try {
-            
+
             Customer customer = this.template.queryForObject(GET_CUSTOMER_BY_ID, new CustomerRowMapper(), customerId);
 
             this.template.update(INSERT_NEW_CALL, newCall.getTimeAndDate(), newCall.getNotes(),
@@ -125,7 +132,7 @@ class CustomerRowMapper implements RowMapper<Customer> {
         String TELEPHONE = rs.getString(4);
         String NOTES = rs.getString(5);
 
-        return new Customer("" + CUSTOMERID, COMPANYNAME, EMAIL, TELEPHONE, NOTES);
+        return new Customer(CUSTOMERID, COMPANYNAME, EMAIL, TELEPHONE, NOTES);
     }
 }
 

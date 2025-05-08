@@ -7,13 +7,11 @@ import se.yrgo.domain.*;
 
 public class CustomerManagementServiceProductionImpl implements CustomerManagementService {
 
-    private CustomerDao customerDao;
+    private final CustomerDao customerDao;
 
     public CustomerManagementServiceProductionImpl(CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
-
-    public CustomerManagementServiceProductionImpl() {};
 
     @Override
     public void newCustomer(Customer newCustomer) {
