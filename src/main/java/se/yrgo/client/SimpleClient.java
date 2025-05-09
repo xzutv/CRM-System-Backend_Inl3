@@ -46,7 +46,6 @@ public class SimpleClient {
 			System.out.println(next);
 		}
 
-		System.out.println(CustomerDaoJdbcTemplateImpl.class.getName());
 		
 		container.close();
 	}
