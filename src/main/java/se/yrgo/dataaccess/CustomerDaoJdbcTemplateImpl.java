@@ -33,22 +33,23 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
     public void createTables() throws DataAccessException {
         try {
             // Integer customerTbl = this.template.queryForObject(
-            //         "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CUSTOMER'",
-            //         Integer.class);
+            // "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME =
+            // 'CUSTOMER'",
+            // Integer.class);
             // Integer callTbl = this.template.queryForObject(
-            //         "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'TBL_CALL'", Integer.class);
+            // "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME =
+            // 'TBL_CALL'", Integer.class);
             // if (customerTbl == 0) {
-                this.template.update(CREATE_CUSTOMER_TBL);
+            this.template.update(CREATE_CUSTOMER_TBL);
             // }
             // if (callTbl == 0) {
-                this.template.update(CREATE_TBL_CALL);
+            this.template.update(CREATE_TBL_CALL);
             // }
 
         } catch (org.springframework.jdbc.BadSqlGrammarException be) {
-            System.out.println("Assuming the table exists");
-        } catch(org.springframework.dao.IncorrectResultSizeDataAccessException ix) {
-            System.out.println("Tables already exists");
-        }catch (Exception e) {
+            System.out.println("Kunde inte skapa tabellen: " + be.getMessage());
+            be.printStackTrace();
+        } catch (Exception e) {
             System.out.println("Unexpected error while creating tables: " + e.getMessage());
         }
     }

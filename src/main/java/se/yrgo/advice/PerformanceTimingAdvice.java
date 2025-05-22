@@ -15,7 +15,7 @@ public class PerformanceTimingAdvice {
             long endTime = System.nanoTime();
             long timeTaken = endTime - startTime;
 
-            System.out.println("The method " + method.getSignature().getName() + " took " + timeTaken / 1000000);
+            System.out.println("The method " + method.getSignature().getName() + " took " + timeTaken / 1000000  + " ms");
         }
     }
 }

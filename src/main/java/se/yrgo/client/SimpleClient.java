@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.*;
 
 import se.yrgo.dataaccess.*;
 import se.yrgo.domain.Action;
@@ -24,7 +25,7 @@ public class SimpleClient {
 		CallHandlingService callService = container.getBean(CallHandlingService.class);
 		DiaryManagementService diaryService = container.getBean(DiaryManagementService.class);
 
-		customerService.newCustomer(new Customer("CS03939", "Acme", "Good Customer"));
+		// customerService.newCustomer(new Customer("CS03939", "Acme", "Good Customer"));
 
 		Call newCall = new Call("Larry Wall called from Acme Corp");
 		Action action1 = new Action("Call back Larry to ask how things are going", new GregorianCalendar(2016, 0, 0), "rac");
@@ -38,7 +39,11 @@ public class SimpleClient {
 			callService.recordCall("CS03939", newCall, actions);
 		}catch (CustomerNotFoundException e){
 			System.out.println("That customer doesn't exist");
-		}
+		} 
+		// catch (IncorrectResultSizeDataAccessException ie){
+		// 	System.out.println("Resultset error" + ie.getMessage());
+		// 	ie.getStackTrace();
+		// }
 
 		System.out.println("Here are the outstanding actions:");
 		Collection<Action> incompleteActions = diaryService.getAllIncompleteActions("rac");
